@@ -12,3 +12,8 @@ def health_check():
 @app.get('/hello')
 def hello():
     return {'message': 'Server is running on OCI instance'}
+
+
+@app.get('/gitactions-cd')
+def cd():
+    return {'message': 'Deployed by Github Actions'}
