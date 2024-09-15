@@ -35,7 +35,7 @@ jobs:
         run: |
           echo "${{ secrets.KEY }}" > /tmp/private_key
           chmod 600 /tmp/private_key  
-          ssh -i /tmp/private_key -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ${{ secrets.OCI_INSTANCE_USERNAME }}@${{ secrets.OCI_INSTNACE_IP }} << EOF
+          ssh -i /tmp/private_key -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ${{ secrets.OCI_INSTANCE_USERNAME }}@${{ secrets.OCI_INSTANCE_IP }} << EOF
             docker pull ${{ secrets.DOCKER_USERNAME }}/oci-python-app-tsi:${{ github.sha }}
             docker stop python-app
             docker rm python-app
