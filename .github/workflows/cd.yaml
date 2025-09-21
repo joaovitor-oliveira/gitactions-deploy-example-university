@@ -30,7 +30,6 @@ jobs:
     needs: build-and-push-image
     steps:
       - uses: actions/checkout@v4
-      
       - name: Conectar à instância via SSH e executar comandos
         run: |
           echo "${{ secrets.KEY }}" > /tmp/private_key
@@ -44,4 +43,21 @@ jobs:
 
       - name: Limpa o arquivo de chave privada após uso
         run: |
-           rm /tmp/private_key
+          rm /tmp/private_key
+
+  notify-on-discord:
+    name: Notificar no Discord
+    runs-on: ubuntu-latest
+    needs: deploy-to-instance
+    if: always()
+    steps:
+      - name: Enviar Notificação para o Discord
+        uses: stegzilla/discord-notify@v2
+        with:
+          webhook_url: ${{ secrets.DISCORD_WEBHOOK_URL }}
+          title: "Novo fluxo de deploy"
+          message: |
+            ### 🚀 Deploy no Repositório `${{ github.repository }}`
+            **Autor do Push:** `${{ github.actor }}`
+            **Status do Deploy:** `${{ needs.deploy-to-instance.result }}`
+            [Ver alterações no commit](https://github.com/${{ github.repository }}/commit/${{ github.sha }})
